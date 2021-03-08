@@ -1,20 +1,11 @@
 <?php
     $database = mysqli_connect('localhost','root','','login_and_register_in_flutter');
-    // if(!database){
-    //     echo "Database connection failed";
-    // }
+    
 
-    // Storing the received JSON into $json variable.
-    $json = file_get_contents('php://input');
-
-    //Decode the received Json and store into a variable
-    $obj = json_decode($json,true);
-
-
-    $Name = $obj['Name'];
-    $Email = $obj['Emaiil'];
-    $Password = $obj['Password'];
-    $Phone = $obj['Phone'];
+    $Name = $_POST['Name'];
+    $Email = $_POST['Email'];
+    $Password = $_POST['Password'];
+    $Phone = $_POST['Phone'];
 
     //checking whether email is already exist or not in table
     $checkSql = "SELECT * FROM user_table WHERE Email = '$Email'";
@@ -22,14 +13,15 @@
     $resultsearch=mysqli_query($database,$checkSql);
 
     //Executing Email check sql query
-    //$check = mysqli_fetch_array(mysqli_query($database,$checkSql));
 
     if(mysqli_num_rows($resultsearch)>0)
     {
            while($row=mysqli_fetch_array($resultsearch))
           {
               $result["success"] = "3";
-              $result["message"] = "user Already exist";
+              $result["message"] = "User Already Exist";
+              $result["data"] = $resultsearch;
+              $result["name"] = $Name ;
               echo json_encode($result);
           }
   }
