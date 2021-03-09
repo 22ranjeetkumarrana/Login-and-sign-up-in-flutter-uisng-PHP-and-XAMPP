@@ -24,12 +24,13 @@
           {
               $result  = 'User Already Exist';
               $failedMsg = json_encode($result);
-              echo $failedMSG;
+              echo $failedMsg;
           }
   }
-  else{
+  else
+  {
         //sql query to insert data into user_table 
-        $sql_query = "INSERT INTO user_table (Name,Email,Password,Phone) VALUES ('$Name','$Email','$C','$Phone')";
+        $sql_query = "INSERT INTO user_table (Name,Email,Password,Phone) VALUES ('$Name','$Email','$Password','$Phone')";
 
         if(mysqli_query($database,$sql_query)){
             $successMsg = 'Successfully Registered';
@@ -40,31 +41,31 @@
             echo 'Try again';
         }
     }
-
     //Registration code is close here
-
 
 
     //Login section is here // 
 
+    $sql = "SELECT * FROM user_table WHERE Email = '$Email' && Password = '$Password'";
+    $result = mysqli_query($database,$sql);
+    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+    $active = $row['active'];
+      
+    $count = mysqli_num_rows($result);
 
-    $loginQuery = "SELECT * FROM user_table WHERE Email='$EMAIL' AND Password = '$Password'";
 
-    $login_serch = mysqli_fetch_array(mysqli_query($database,$checkSql));
-
-    if(isset($login_serch)){
-        //Successfully login message
+    if($count > 0) 
+    {
         $success_login_msg  = 'Login Success';
         $sucessMSG = json_decode($success_login_msg);
         echo $successMsg;
     }
-    else{
+    else
+    {
         $invalid_match = 'Invalid Login Details: ';
         $failedMSG = json_decode($invalid_match);
         echo $failedMSG;
     }
-
-
     //login section is close here // 
 
     mysqli_close($database);
